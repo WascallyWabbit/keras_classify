@@ -119,3 +119,11 @@ def grouper(iterable, n, fillvalue=None):
     args= [n for n in ret if n is not None]
 
     return args
+
+def load_data(train_path = "", numclasses=16, num_images = None, onehot=False):
+    training_list = get_tensor_list(num_classes=numclasses, path=train_path, num=num_images, onehot=onehot)
+    random.shuffle(training_list)
+    n=len(training_list)
+    tr = training_list[:7 * n // 8]
+    te = training_list[7 * n // 8:]
+    return ([pngs for (pngs,labels) in tr],[labels for (pngs,labels) in tr]),([pngs for (pngs,labels) in te],[labels for (pngs,labels) in te])

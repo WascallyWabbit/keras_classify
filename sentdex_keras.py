@@ -19,7 +19,7 @@ def main():
     img = ut.read_image(filename=SAMPLE_FILE, show=False)
     img = np.array(img)
     IMG_SHAPE=img.shape
-    (x_train, y_train), (x_test, y_test)=load_data(numclasses=FLAGS.numclasses, train_path=FLAGS.train_data_path, onehot=True)
+    (x_train, y_train), (x_test, y_test)=ut.load_data(numclasses=FLAGS.numclasses, train_path=FLAGS.train_data_path, onehot=True)
 
     print(f'IMG_SHAPE:{IMG_SHAPE},  y_train shape:{y_train[0].shape}')
 
@@ -68,13 +68,7 @@ def main():
 
     pass
 
-def load_data(numclasses=16, train_path=file_path_carvana_train, num_images = None, onehot=False):
-    training_list = ut.get_tensor_list(num_classes=numclasses, path=train_path, num=num_images, onehot=onehot)
-    random.shuffle(training_list)
-    n=len(training_list)
-    tr = training_list[:7 * n // 8]
-    te = training_list[7 * n // 8:]
-    return ([pngs for (pngs,labels) in tr],[labels for (pngs,labels) in tr]),([pngs for (pngs,labels) in te],[labels for (pngs,labels) in te])
+
 
 if __name__ == '__main__':
     main()
