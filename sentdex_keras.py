@@ -21,7 +21,7 @@ def main():
     IMG_SHAPE=img.shape
     (x_train, y_train), (x_test, y_test)=ut.load_data(numclasses=FLAGS.numclasses, train_path=FLAGS.train_data_path, onehot=True)
 
-    print(f'IMG_SHAPE:{IMG_SHAPE},  y_train shape:{y_train[0].shape}')
+    print('IMG_SHAPE:{0},  y_train shape:{1}'.format(IMG_SHAPE,y_train[0].shape))
 
     model = tf.keras.models.Sequential(
     [
@@ -29,8 +29,8 @@ def main():
     tf.keras.layers.MaxPool2D(),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(16, activation='softmax', name='softmax')])
-    print(f'Saving in {FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")}')
-    tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+f'{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}')
+    print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
+    tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
 
     optimizer=tf.keras.optimizers.Adam(lr=FLAGS.learning_rate)
     model.compile(optimizer=optimizer,
@@ -41,13 +41,13 @@ def main():
     model.summary()
 
     for i in range(FLAGS.epochs):
-        print(f'Epoch:{i} of {FLAGS.epochs}')
+        print('Epoch:{0} of {1}'.format(i, FLAGS.epochs))
         n = len(x_train)
         for batch in range(0,len(x_train), FLAGS.batch_size):
-            print(f'Batch {batch} of {n}.')
+            print('Batch {0} of {1}.'.format(batch,n))
             bunch_x, bunch_y = x_train[batch:batch+FLAGS.batch_size], y_train[batch:batch+FLAGS.batch_size]
             if len(bunch_x) < FLAGS.batch_size: # skip partial batches
-                print(f'Skipping {len(bunch_x)} samples..')
+                print('Skipping {0} samples..'.format(len(bunch_x)))
                 continue
 
             xs = []
@@ -64,7 +64,7 @@ def main():
             model.fit(x=X, y=Y,steps_per_epoch=10, callbacks=[tensorboard])
 
             score = model.evaluate(x=X,y=Y, batch_size=FLAGS.batch_size)
-            print(f'Score:{score}')
+            print('Score:{0}'.format(score))
 
     pass
 
