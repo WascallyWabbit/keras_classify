@@ -11,6 +11,8 @@ file_path_carvana_train = '/Users/Eric Fowler/Downloads/carvana/train/'
 
 
 def main():
+    print('tf version:{0}'.format(tf.VERSION))
+    print('tf.keras version:{0}'.format(tf.keras.__version__))
     FLAGS, unparsed = ut.parseArgs()
     print(FLAGS)
     # TEST_DATA_PATH      = FLAGS.test_data_path
@@ -25,10 +27,12 @@ def main():
 
     model = tf.keras.models.Sequential(
     [
-    tf.keras.layers.Conv2D(4,(8,8), strides=4, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
+    tf.keras.layers.Conv2D(16,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
     tf.keras.layers.MaxPool2D(),
+    tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(16, activation='softmax', name='softmax')])
+    tf.keras.layers.Dense(32, activation='relu', name='d1'),
+    tf.keras.layers.Dense(16, activation='softmax', name='softmax_d2')])
     print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
     tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
 
