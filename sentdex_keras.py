@@ -26,13 +26,13 @@ def main():
 
     model = tf.keras.models.Sequential(
     [
-    #tf.keras.layers.Conv2D(16,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
+    tf.keras.layers.Conv2D(8,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
     #tf.keras.layers.MaxPool2D(),
-    #tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
+    tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(256, activation='relu', name='d1'),
+    #tf.keras.layers.Dense(256, activation='relu', name='d1'),
     #tf.keras.layers.Dense(128, activation='relu', name='d2'),
-    tf.keras.layers.Dense(64, activation='relu', name='d3'),
+    #tf.keras.layers.Dense(64, activation='relu', name='d3'),
     tf.keras.layers.Dense(16, activation='softmax', name='softmax_d4')])
     print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
     tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
