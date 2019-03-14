@@ -54,7 +54,7 @@ def get_tensor_list(path, num_classes=16, num=None, onehot=False, extension='png
     if not files:
         return None
 
-    pngs = [f for f in files if f.endswith('jpg')]  # this gets 'filename_37.png'
+    pngs = [f for f in files if f.endswith(extension)]  # this gets 'filename_37.png'
 
     number_in_filename = [name_fragment.split('_')[1] for name_fragment in pngs]  # this gets '37.png'
     number_in_filename = [name_fragment.split('.')[0] for name_fragment in number_in_filename]  # this gets '37'

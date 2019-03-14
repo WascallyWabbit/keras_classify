@@ -30,9 +30,9 @@ def main():
     #tf.keras.layers.MaxPool2D(),
     #tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(512, activation='relu', name='d1'),
-    tf.keras.layers.Dense(128, activation='relu', name='d2'),
-    tf.keras.layers.Dense(32, activation='relu', name='d3'),
+    tf.keras.layers.Dense(256, activation='relu', name='d1'),
+    #tf.keras.layers.Dense(128, activation='relu', name='d2'),
+    tf.keras.layers.Dense(64, activation='relu', name='d3'),
     tf.keras.layers.Dense(16, activation='softmax', name='softmax_d4')])
     print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
     tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
@@ -71,7 +71,7 @@ def main():
             score = model.evaluate(x=X,y=Y, batch_size=FLAGS.batch_size)
             if i == 0 and batch == 0:
                 model.summary()
-                
+
             print('Score:{0}'.format(score))
 
     pass
