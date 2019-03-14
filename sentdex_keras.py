@@ -26,12 +26,14 @@ def main():
 
     model = tf.keras.models.Sequential(
     [
-    tf.keras.layers.Conv2D(16,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
-    tf.keras.layers.MaxPool2D(),
-    tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
+    #tf.keras.layers.Conv2D(16,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
+    #tf.keras.layers.MaxPool2D(),
+    #tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(32, activation='relu', name='d1'),
-    tf.keras.layers.Dense(16, activation='softmax', name='softmax_d2')])
+    tf.keras.layers.Dense(512, activation='relu', name='d1'),
+    tf.keras.layers.Dense(128, activation='relu', name='d2'),
+    tf.keras.layers.Dense(32, activation='relu', name='d3'),
+    tf.keras.layers.Dense(16, activation='softmax', name='softmax_d4')])
     print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
     tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
 
@@ -41,7 +43,7 @@ def main():
                   metrics=['accuracy']
                   )
 
-    model.summary()
+
 
     for i in range(FLAGS.epochs):
         print('Epoch:{0} of {1}'.format(i, FLAGS.epochs))
@@ -67,6 +69,9 @@ def main():
             model.fit(x=X, y=Y,steps_per_epoch=10, callbacks=[tensorboard])
 
             score = model.evaluate(x=X,y=Y, batch_size=FLAGS.batch_size)
+            if i == 0 and batch == 0:
+                model.summary()
+                
             print('Score:{0}'.format(score))
 
     pass
