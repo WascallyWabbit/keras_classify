@@ -17,11 +17,10 @@ def main():
     print(FLAGS)
     # TEST_DATA_PATH      = FLAGS.test_data_path
     SAMPLE_FILE = FLAGS.train_data_path + FLAGS.sample + '.' + FLAGS.img_file_extension
-
     img = ut.read_image(filename=SAMPLE_FILE, show=False)
     img = np.array(img)
     IMG_SHAPE=img.shape
-    (x_train, y_train), (x_test, y_test)=ut.load_data(numclasses=FLAGS.numclasses, train_path=FLAGS.train_data_path, onehot=True)
+    (x_train, y_train), (x_test, y_test)=ut.load_data(numclasses=FLAGS.numclasses, train_path=FLAGS.train_data_path, onehot=True, extension=FLAGS.img_file_extension)
 
     print('IMG_SHAPE:{0},  y_train shape:{1}'.format(IMG_SHAPE,y_train[0].shape))
 

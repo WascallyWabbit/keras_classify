@@ -48,13 +48,13 @@ def parseArgs():
     return parser.parse_known_args()
 
 
-def get_tensor_list(path, num_classes=16, num=None, onehot=False):
+def get_tensor_list(path, num_classes=16, num=None, onehot=False, extension='png'):
     files = os.listdir(path)
 
     if not files:
         return None
 
-    pngs = [f for f in files if f.endswith('png')]  # this gets 'filename_37.png'
+    pngs = [f for f in files if f.endswith('jpg')]  # this gets 'filename_37.png'
 
     number_in_filename = [name_fragment.split('_')[1] for name_fragment in pngs]  # this gets '37.png'
     number_in_filename = [name_fragment.split('.')[0] for name_fragment in number_in_filename]  # this gets '37'
@@ -120,8 +120,8 @@ def grouper(iterable, n, fillvalue=None):
 
     return args
 
-def load_data(train_path = "", numclasses=16, num_images = None, onehot=False):
-    training_list = get_tensor_list(num_classes=numclasses, path=train_path, num=num_images, onehot=onehot)
+def load_data(train_path = "", numclasses=16, num_images = None, onehot=False, extension='jpg'):
+    training_list = get_tensor_list(num_classes=numclasses, path=train_path, num=num_images, onehot=onehot, extension=extension)
     random.shuffle(training_list)
     n=len(training_list)
     tr = training_list[:7 * n // 8]
