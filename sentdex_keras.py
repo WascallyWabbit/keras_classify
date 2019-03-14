@@ -44,7 +44,7 @@ def main():
                   )
 
 
-
+    scores = []
     for i in range(FLAGS.epochs):
         print('Epoch:{0} of {1}'.format(i, FLAGS.epochs))
         n = len(x_train)
@@ -69,10 +69,14 @@ def main():
             model.fit(x=X, y=Y,steps_per_epoch=10, callbacks=[tensorboard])
 
             score = model.evaluate(x=X,y=Y, batch_size=FLAGS.batch_size)
+            scores.append(score)
             if i == 0 and batch == 0:
                 model.summary()
 
             print('Score:{0}'.format(score))
+
+        loss,acc = np.array([s[0] for s in scores]), np.array([s[1] for s in scores])
+    print("Average loss:{0}  Average accuracy:{1}%%".format(np.mean(loss), 100*np.mean(acc)))
 
     pass
 
