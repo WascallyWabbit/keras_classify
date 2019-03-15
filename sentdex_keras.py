@@ -26,9 +26,9 @@ def main():
 
     model = tf.keras.models.Sequential(
     [
-    tf.keras.layers.Conv2D(8,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size),
+    tf.keras.layers.Conv2D(8,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size,name='conv2d_1'),
     #tf.keras.layers.MaxPool2D(),
-    tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid'),
+    tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid',name='conv2d_2'),
     tf.keras.layers.Flatten(),
     #tf.keras.layers.Dense(256, activation='relu', name='d1'),
     #tf.keras.layers.Dense(128, activation='relu', name='d2'),
@@ -59,7 +59,7 @@ def main():
             ys = []
             for datum in range(len(bunch_x)):
                 file = bunch_x[datum]
-                img = ut.read_image(filename=FLAGS.train_data_path+file, show=False)
+                img = ut.read_image(filename=FLAGS.train_data_path+file, show=True)
                 img=np.array(img)
                 xs.append(img)
                 ys.append(bunch_y[datum])

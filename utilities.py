@@ -122,7 +122,7 @@ def grouper(iterable, n, fillvalue=None):
 
 def load_data(train_path = "", numclasses=16, num_images = None, onehot=False, extension='jpg'):
     training_list = get_tensor_list(num_classes=numclasses, path=train_path, num=num_images, onehot=onehot, extension=extension)
-    random.shuffle(training_list)
+    #random.shuffle(training_list)
     n=len(training_list)
     tr = training_list[:7 * n // 8]
     te = training_list[7 * n // 8:]
