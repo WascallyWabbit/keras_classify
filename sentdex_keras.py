@@ -6,11 +6,13 @@ import numpy as np
 import utilities as ut
 import matplotlib.pyplot as plt
 import datetime
+import  PIL.Image as Img, PIL.ImageMath as IM
 #file_path_carvana_test = '/Users/Eric Fowler/Downloads/carvana/test/'
 file_path_carvana_train = '/Users/Eric Fowler/Downloads/carvana/train/'
 
 
 def main():
+    thrash = True
     print('tf version:{0}'.format(tf.VERSION))
     print('tf.keras version:{0}'.format(tf.keras.__version__))
     FLAGS, unparsed = ut.parseArgs()
@@ -19,6 +21,8 @@ def main():
     SAMPLE_FILE = FLAGS.train_data_path + FLAGS.sample + '.' + FLAGS.img_file_extension
     img = ut.read_image(filename=SAMPLE_FILE, show=False)
     img = np.array(img)
+    if thrash == True:
+        img = ut.thrash_img(img)
     IMG_SHAPE=img.shape
     (x_train, y_train), (x_test, y_test)=ut.load_data(numclasses=FLAGS.numclasses, train_path=FLAGS.train_data_path, onehot=True, extension=FLAGS.img_file_extension)
 
@@ -26,14 +30,14 @@ def main():
 
     model = tf.keras.models.Sequential(
     [
-    tf.keras.layers.Conv2D(8,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size,name='conv2d_1'),
+    #tf.keras.layers.Conv2D(8,(8,8), strides=2, activation='relu',input_shape=IMG_SHAPE,batch_size=FLAGS.batch_size,name='conv2d_1'),
     #tf.keras.layers.MaxPool2D(),
-    tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid',name='conv2d_2'),
+    #tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid',name='conv2d_2'),
     tf.keras.layers.Flatten(),
-    #tf.keras.layers.Dense(256, activation='relu', name='d1'),
-    #tf.keras.layers.Dense(128, activation='relu', name='d2'),
-    #tf.keras.layers.Dense(64, activation='relu', name='d3'),
-    tf.keras.layers.Dense(16, activation='softmax', name='softmax_d4')])
+    tf.keras.layers.Dense(256, activation='relu', name='d1'),
+    tf.keras.layers.Dense(128, activation='relu', name='d2'),
+    tf.keras.layers.Dense(64,  activation='relu', name='d3'),
+    tf.keras.layers.Dense(16,  activation='softmax', name='softmax_d4')])
     print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
     tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
 
@@ -59,8 +63,10 @@ def main():
             ys = []
             for datum in range(len(bunch_x)):
                 file = bunch_x[datum]
-                img = ut.read_image(filename=FLAGS.train_data_path+file, show=True)
+                img = ut.read_image(filename=FLAGS.train_data_path+file, show=False)
+                #img=Img.Image.convert(img, "F")
                 img=np.array(img)
+                #img=np.linalg.norm(img, axis=None, ord=None, keepdims=True)
                 xs.append(img)
                 ys.append(bunch_y[datum])
 

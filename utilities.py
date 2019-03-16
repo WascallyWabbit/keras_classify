@@ -4,6 +4,7 @@ import random
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as clr
 
 def parseArgs():
     parser = argparse.ArgumentParser()
@@ -94,9 +95,12 @@ def pixnum_from_img_shape(img_shape):
 
     return pixel_num
 
+def thrash_img(img):
+    return img / 255.
+
 
 def read_image(filename, show, scale=1.0):
-   mm = Image.open(filename).convert('LA')
+   mm = Image.open(filename).convert('F')
    mm = scale_image(img=mm, scale=scale)
 
    if show == True:
