@@ -34,17 +34,17 @@ def main():
     #tf.keras.layers.MaxPool2D(),
     #tf.keras.layers.Conv2D(8, (4, 4), strides=1, activation='sigmoid',name='conv2d_2'),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(256, activation='relu', name='d1'),
-    tf.keras.layers.Dense(128, activation='relu', name='d2'),
-    tf.keras.layers.Dense(64,  activation='relu', name='d3'),
+    tf.keras.layers.Dense(256, activation='sigmoid', name='d1'),
+    tf.keras.layers.Dense(128, activation='sigmoid', name='d2'),
+    tf.keras.layers.Dense(64,  activation='sigmoid', name='d3'),
     tf.keras.layers.Dense(16,  activation='softmax', name='softmax_d4')])
     print('Saving in {0}'.format(FLAGS.tb_dir+datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
     tensorboard = TensorBoard(log_dir=FLAGS.tb_dir+'{0}'.format(datetime.datetime.now().strftime("%Y%m%d%H%M%S")))
 
     optimizer=tf.keras.optimizers.Adam(lr=FLAGS.learning_rate)
     model.compile(optimizer=optimizer,
-                  loss='mean_squared_error',
-                  metrics=['accuracy']
+                  loss='mse',
+                  metrics=['mae']
                   )
 
 
@@ -82,7 +82,7 @@ def main():
             print('Score:{0}'.format(score))
 
         loss,acc = np.array([s[0] for s in scores]), np.array([s[1] for s in scores])
-    print("Average loss:{0}  Average accuracy:{1}%%".format(np.mean(loss), 100*np.mean(acc)))
+    print("Average loss:{0}  Average accuracy:{1}%".format(np.mean(loss), 100*np.mean(acc)))
 
     pass
 
