@@ -27,6 +27,41 @@ def parseArgs():
     parser.add_argument('--learning_rate', type=float,
                         default=0.001,
                         help='Learning rate')
+    parser.add_argument('--model', type=str,
+                        default='dense',
+                        choices=['dense', 'conv2d'],
+                        help='Dense or Conv2D?')
+    parser.add_argument('--optimizer', type=str,
+                        default='adam',
+                        choices=['adam', 'sgd'],
+                        help='Optimizer?')
+    parser.add_argument('--metric', type=str,
+                        default='mean_squared_error',
+                        choices=[
+                            "binary_crossentropy",
+                            "categorical_hinge", "categorical_crossentropy", "cosine_proximity",
+                            "hinge",
+                            "kullback_leibler_divergence",
+                            "logcosh",
+                            "mean_absolute_error", "mean_absolute_percentage_error", "mean_squared_error",
+                            "mean_squared_logarithmic_error",
+                            "poisson",
+                            "sparse_categorical_crossentropy", "squared_hinge"
+                        ],
+                        help='Metric?')
+    parser.add_argument('--loss', type=str,
+                        default='mean_squared_error',
+                        choices=[
+                            "binary_crossentropy",
+                            "categorical_hinge","categorical_crossentropy","cosine_proximity",
+                            "hinge",
+                            "kullback_leibler_divergence",
+                            "logcosh",
+                            "mean_absolute_error","mean_absolute_percentage_error","mean_squared_error","mean_squared_logarithmic_error",
+                            "poisson",
+                            "sparse_categorical_crossentropy","squared_hinge"
+                        ],
+                        help='Loss?')
     parser.add_argument('--show', type=bool,
                          default=False,
                          help='Show some images?')
@@ -37,7 +72,7 @@ def parseArgs():
                         default=2,
                         help='Epochs')
     parser.add_argument('--batch_size', type=int,
-                        default=10,
+                        default=16,
                         help='Cut samples into chunks of this size')
     parser.add_argument('--tb_dir', type=str,
                         default='./logs/',
@@ -96,11 +131,12 @@ def pixnum_from_img_shape(img_shape):
     return pixel_num
 
 def thrash_img(img):
-    return img / 255.
+
+    return img.astype(float)/255.
 
 
 def read_image(filename, show, scale=1.0):
-   mm = Image.open(filename).convert('F')
+   mm = Image.open(filename).convert('LA')
    mm = scale_image(img=mm, scale=scale)
 
    if show == True:
