@@ -36,8 +36,9 @@ def parseArgs():
                         choices=['adam', 'sgd'],
                         help='Optimizer?')
     parser.add_argument('--metric', type=str,
-                        default='mean_squared_error',
+                        default='accuracy',
                         choices=[
+                            "accuracy",
                             "binary_crossentropy",
                             "categorical_hinge", "categorical_crossentropy", "cosine_proximity",
                             "hinge",
@@ -50,8 +51,9 @@ def parseArgs():
                         ],
                         help='Metric?')
     parser.add_argument('--loss', type=str,
-                        default='mean_squared_error',
+                        default='accuracy',
                         choices=[
+                            "accuracy",
                             "binary_crossentropy",
                             "categorical_hinge","categorical_crossentropy","cosine_proximity",
                             "hinge",
@@ -62,6 +64,9 @@ def parseArgs():
                             "sparse_categorical_crossentropy","squared_hinge"
                         ],
                         help='Loss?')
+    parser.add_argument('--shuffle', type=bool,
+                        default=False,
+                        help='Shuffle training data?')
     parser.add_argument('--show', type=bool,
                          default=False,
                          help='Show some images?')

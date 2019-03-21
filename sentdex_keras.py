@@ -67,14 +67,21 @@ def main():
 
             X= np.stack(xs, axis=0)
             Y= np.stack(ys, axis=0)
-            model.fit(x=X, y=Y, steps_per_epoch=10, callbacks=[tensorboard])
 
-            score = model.evaluate(x=X,y=Y, batch_size=flags.batch_size)
-            scores.append(score)
+            score_before = model.evaluate(x=X,y=Y, batch_size=flags.batch_size)
+
+            _ = model.fit(x=X, y=Y, shuffle=flags.shuffle, callbacks=[tensorboard])
+
+            score_after = model.evaluate(x=X,y=Y, batch_size=flags.batch_size)
+
+            if score_before == score_after:
+                print("Scores before and after training are identical")
+
+            scores.append(score_after)
             if epoch == 0 and batch == 0:
                 model.summary()
 
-            print('Score:{0}'.format(score))
+            print('Score:{0}'.format(score_after))
 
         loss,acc = np.array([s[0] for s in scores]), np.array([s[1] for s in scores])
     print("Average loss:{0}  Average accuracy:{1}%".format(np.mean(loss), 100*np.mean(acc)))
@@ -97,8 +104,11 @@ def make_dense_model(flags=None):
 def make_convnet_model(flags, shape):
     model = tf.keras.models.Sequential(
         [
-            tf.keras.layers.Conv2D(8,(3,3), strides=2, activation='sigmoid',input_shape=shape,batch_size=flags.batch_size,name='conv2d_1'),
-            tf.keras.layers.Conv2D(8, (3,3), strides=1, activation='sigmoid',name='conv2d_2'),
+            tf.keras.layers.Conv2D(32,(8,8), strides=2, activation='relu',input_shape=shape,batch_size=flags.batch_size,name='conv2d_1'),
+            tf.keras.layers.Conv2D(24, (4,4), strides=1, activation='relu',name='conv2d_2'),
+            tf.keras.layers.MaxPool2D(),
+            tf.keras.layers.Conv2D(16, (3, 3), strides=2, activation='sigmoid', input_shape=shape,batch_size=flags.batch_size, name='conv2d_3'),
+            tf.keras.layers.Conv2D(8, (3, 3), strides=1, activation='sigmoid', name='conv2d_4'),
             tf.keras.layers.MaxPool2D(),
             # tf.keras.layers.Conv2D(8,(8,8), strides=2, activation='relu',input_shape=shape,batch_size=flags.batch_size,name='conv2d_1'),
             # tf.keras.layers.Conv2D(64, (5, 5), name="conv2_5x5"),
