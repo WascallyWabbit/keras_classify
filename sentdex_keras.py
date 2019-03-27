@@ -33,7 +33,7 @@ def main():
     elif flags.model  == 'conv2d':
         model = ut.make_convnet_model(flags=flags, shape=IMG_SHAPE)
     else:
-        print(f'No model, no hope. Quitting...')
+        print('No model, no hope. Quitting...')
         return
 
     print('Saving in {0}'.format(flags.tb_dir + start_time))
@@ -124,9 +124,9 @@ def main():
 
                 score = model.evaluate(x=X, y=Y, batch_size=flags.batch_size)
                 test_scores.append(score)
-                print(f'Test score:{score}')
+                print(f'Test score:{0}'.format(score))
 
-            print(f'Average score:{np.mean(test_scores)}')
+            print(f'Average score:{0},{1}'.format(np.mean(test_scores[0]),np.mean(test_scores[1])))
 
     pass
 
