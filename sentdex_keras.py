@@ -91,7 +91,7 @@ def main():
     if flags.save_model:
         model_name = flags.model_name if flags.model_name != None else start_time
         ut.save_model(model, flags.model_dir+model_name)
-        print(f'Saved model to disk, json in {flags.model_dir + model_name + ".json"}')
+        print('Saved model to disk, json in {0}'.format(flags.model_dir + model_name + ".json"))
 
     if flags.save_data:
         data_name = flags.data_name if flags.data_name != None else start_time
@@ -124,9 +124,9 @@ def main():
 
                 score = model.evaluate(x=X, y=Y, batch_size=flags.batch_size)
                 test_scores.append(score)
-                print(f'Test score:{0}'.format(score))
+                print('Test score:{0}'.format(score))
 
-            print(f'Average score:{0},{1}'.format(np.mean(test_scores[0]),np.mean(test_scores[1])))
+            print('Average score:{0},{1}'.format(np.mean(test_scores[0]),np.mean(test_scores[1])))
 
     pass
 
