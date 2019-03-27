@@ -4,7 +4,9 @@ import random
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import tensorflow as tf
 import matplotlib.colors as clr
+import tensorflow.keras.models
 
 def parseArgs():
     parser = argparse.ArgumentParser()
@@ -12,8 +14,36 @@ def parseArgs():
                         default='/Users/Eric Fowler/Downloads/carvana/train/_128x128/',
                         help='Directory for storing input data')
     parser.add_argument('--test_data_path', type=str,
-                        default='/Users/Eric Fowler/Downloads/carvana/test/_128x128/',
+                        default='/Users/Eric Fowler/Downloads/carvana/train/_128x128/',
                         help='Directory for storing input data')
+    parser.add_argument('--save_model', type=bool,
+                        default=False,
+                        help='Save model? Need to specify model directory and name.')
+    parser.add_argument('--load_model', type=bool,
+                        default=False,
+                        help='Load stored model? Need to specify model directory and name.')
+    parser.add_argument('--model_dir', type=str,
+                        default=None,
+                        help='Directory for storing model as JSON file. Leave empty to dump data')
+    parser.add_argument('--model_name', type=str,
+                        default=None,
+                        help='Name of stored model as JSON file.')
+    parser.add_argument('--evaluate', type=bool,
+                        default=True,
+                        help='Evaluate model?')
+    parser.add_argument('--save_data', type=bool,
+                        default=False,
+                        help='Save data? Need to specify data directory and name.')
+    parser.add_argument('--load_data', type=bool,
+                        default=False,
+                        help='Load stored data? Need to specify data directory and name.')
+    parser.add_argument('--data_dir', type=str,
+                        default=None,
+                        help='Directory for storing data as H5 file. Leave empty to dump data')
+    parser.add_argument('--data_name', type=str,
+                        default=None,
+                        help='Name of stored data as H5 file.')
+    
     parser.add_argument('--target', type=str,
                         default='mnist',
                         choices=['carvana', 'mnist'],
@@ -172,3 +202,50 @@ def load_data(train_path = "", numclasses=16, num_images = None, onehot=False, e
     tr = training_list[:7 * n // 8]
     te = training_list[7 * n // 8:]
     return ([pngs for (pngs,labels) in tr],[labels for (pngs,labels) in tr]),([pngs for (pngs,labels) in te],[labels for (pngs,labels) in te])
+
+
+def make_dense_model(flags=None):
+    model = tf.keras.models.Sequential(
+        [
+         tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(256, activation='sigmoid', name='d1'),
+            tf.keras.layers.Dense(128, activation='sigmoid', name='d2'),
+            tf.keras.layers.Dense(64, activation='sigmoid', name='d3'),
+            tf.keras.layers.Dense(16, activation='softmax', name='softmax_d4')])
+
+    return model
+
+
+def make_convnet_model(flags, shape):
+    model = tf.keras.models.Sequential(
+        [
+            tf.keras.layers.Conv2D(32,(8,8), strides=2, activation='relu',input_shape=shape,batch_size=flags.batch_size,name='conv2d_1'),
+            tf.keras.layers.Conv2D(24, (4,4), strides=1, activation='relu',name='conv2d_2'),
+            tf.keras.layers.MaxPool2D(),
+            tf.keras.layers.Conv2D(16, (3, 3), strides=2, activation='sigmoid', input_shape=shape,batch_size=flags.batch_size, name='conv2d_3'),
+            tf.keras.layers.Conv2D(8, (3, 3), strides=1, activation='sigmoid', name='conv2d_4'),
+            tf.keras.layers.MaxPool2D(),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(64, activation='sigmoid', name='d3'),
+            tf.keras.layers.Dense(16, activation='softmax', name='softmax_d4')
+        ])
+
+    return model
+
+def load_stored_model(name):
+    json_file = open(name+'.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    loaded_model = tf.keras.models.model_from_json(loaded_model_json)
+    return loaded_model
+
+def load_stored_data(model, date_file_name):
+    model.load_weights(date_file_name+'.h5')
+    return model
+
+def save_model(model, file_path_and_name):
+    # serialize model to JSON
+    model_json = model.to_json()
+    with open(file_path_and_name + '.json', "w") as json_file:
+        json_file.write(model_json)
+# serialize weights to HDF5
