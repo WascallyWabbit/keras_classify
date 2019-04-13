@@ -46,11 +46,11 @@ def main():
                   )
 
     scores = []
-    for epoch in range(1,flags.epochs+1):
-        print('Epoch:{0} of {1}'.format(epoch, flags.epochs))
+    for epoch in range(flags.epochs):
+        print('Epoch:{0} of {1}'.format(epoch+1, flags.epochs))
         n = len(x_train)
         for batch in range(0,len(x_train), flags.batch_size):
-            print('Batch {0} of {1}, epoch {2} of {3}.'.format(batch,n, epoch, flags.epochs))
+            print('Batch {0} of {1}, epoch {2} of {3}.'.format(batch+1,n+1, epoch+1, flags.epochs))
             bunch_x, bunch_y = x_train[batch:batch+flags.batch_size], y_train[batch:batch+flags.batch_size]
             if len(bunch_x) < flags.batch_size: # skip partial batches
                 print('Skipping {0} samples..'.format(len(bunch_x)))
@@ -58,6 +58,7 @@ def main():
 
             xs = []
             ys = []
+            print("Iterating {0} samples".format(len(bunch_x)))
             for datum in range(len(bunch_x)):
                 file = bunch_x[datum]
                 img = ut.read_image(filename=flags.train_data_path+file, show=False)
@@ -101,8 +102,8 @@ def main():
         test_scores = []
         if flags.evaluate:
             n = len(x_test)
-            for batch in range(0, len(x_train), flags.batch_size):
-                print('Batch {0} of {1}, epoch {2} of {3}.'.format(batch, n, epoch, flags.epochs))
+            for batch in range(0, len(x_test), flags.batch_size):
+                print('Batch {0} of {1}.'.format(batch+1, n+1))
                 bunch_x, bunch_y = x_test[batch:batch + flags.batch_size], y_test[batch:batch + flags.batch_size]
                 if len(bunch_x) < flags.batch_size:  # skip partial batches
                     print('Skipping {0} samples..'.format(len(bunch_x)))
@@ -110,14 +111,14 @@ def main():
 
                 xs = []
                 ys = []
-                for datum in range(len(bunch_x)):
-                    file = bunch_x[datum]
+                for d in range(len(bunch_x)):
+                    file = bunch_x[d]
                     img = ut.read_image(filename=flags.test_data_path + file, show=False)
                     img = np.array(img)
                     if thrash == True:
                         img = ut.thrash_img(img)
                     xs.append(img)
-                    ys.append(bunch_y[datum])
+                    ys.append(bunch_y[d])
 
                 X = np.stack(xs, axis=0)
                 Y = np.stack(ys, axis=0)

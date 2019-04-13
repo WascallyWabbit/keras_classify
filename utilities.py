@@ -43,7 +43,6 @@ def parseArgs():
     parser.add_argument('--data_name', type=str,
                         default=None,
                         help='Name of stored data as H5 file.')
-    
     parser.add_argument('--target', type=str,
                         default='mnist',
                         choices=['carvana', 'mnist'],
