@@ -10,6 +10,15 @@ import tensorflow.keras.models
 
 def parseArgs():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--train', type=bool,
+                        default=False,
+                        help='Train model?')
+    parser.add_argument('--evaluate', type=bool,
+                        default=True,
+                        help='Evaluate model?')
+    parser.add_argument('--predict', type=bool,
+                        default=True,
+                        help='Predict using model?')
     parser.add_argument('--train_data_path', type=str,
                         default='/Users/Eric Fowler/Downloads/carvana/train/_128x128/',
                         help='Directory for storing input data')
@@ -28,9 +37,6 @@ def parseArgs():
     parser.add_argument('--model_name', type=str,
                         default=None,
                         help='Name of stored model as JSON file.')
-    parser.add_argument('--evaluate', type=bool,
-                        default=True,
-                        help='Evaluate model?')
     parser.add_argument('--save_data', type=bool,
                         default=False,
                         help='Save data? Need to specify data directory and name.')
@@ -93,9 +99,9 @@ def parseArgs():
                             "sparse_categorical_crossentropy","squared_hinge"
                         ],
                         help='Loss?')
-    parser.add_argument('--shuffle', type=bool,
+    parser.add_argument('--show_results', type=bool,
                         default=False,
-                        help='Shuffle training data?')
+                        help='Show results?')
     parser.add_argument('--show', type=bool,
                          default=False,
                          help='Show some images?')
@@ -114,6 +120,7 @@ def parseArgs():
     parser.add_argument('--img_file_extension', type=str,
                         default='png',
                         help='Extension of image file names')
+
 
     return parser.parse_known_args()
 
@@ -165,7 +172,6 @@ def pixnum_from_img_shape(img_shape):
     return pixel_num
 
 def thrash_img(img):
-
     return img.astype(float)/255.
 
 
@@ -194,13 +200,14 @@ def grouper(iterable, n, fillvalue=None):
 
     return args
 
-def load_data(train_path = "", numclasses=16, num_images = None, onehot=False, extension='jpg'):
+def load_data(train_path = "", test_path = "", numclasses=16, num_images = None, onehot=False, extension='jpg'):
     training_list = get_tensor_list(num_classes=numclasses, path=train_path, num=num_images, onehot=onehot, extension=extension)
-    #random.shuffle(training_list)
-    n=len(training_list)
-    tr = training_list[:7 * n // 8]
-    te = training_list[7 * n // 8:]
-    return ([pngs for (pngs,labels) in tr],[labels for (pngs,labels) in tr]),([pngs for (pngs,labels) in te],[labels for (pngs,labels) in te])
+    random.shuffle(training_list)
+
+    test_list = get_tensor_list(num_classes=numclasses, path=test_path, num=num_images, onehot=onehot,
+                                    extension=extension)
+    random.shuffle(test_list)
+    return ([pngs for (pngs,labels) in training_list],[labels for (pngs,labels) in training_list]),([pngs for (pngs,labels) in test_list],[labels for (pngs,labels) in test_list])
 
 
 def make_dense_model(flags=None):
@@ -248,3 +255,12 @@ def save_model(model, file_path_and_name):
     with open(file_path_and_name + '.json', "w") as json_file:
         json_file.write(model_json)
 # serialize weights to HDF5
+
+def process_predictions(predictions, y):
+    arrays=[]
+    for p in predictions:
+        n = np.argmax(p, axis=0)
+        arr = p[n:]
+        arr = np.append(arr, p[:n])
+        arrays.append(arr)
+    return arrays
