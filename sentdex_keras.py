@@ -51,6 +51,7 @@ def main():
                   )
 
     if flags.train == True:
+        print('Training...')
         scores = []
         for epoch in range(flags.epochs):
             print('Epoch:{0} of {1}'.format(epoch+1, flags.epochs))
@@ -149,6 +150,7 @@ def main():
                     nTotal = nTotal+1
 
                 pass
+
         sums_array /= nTotal
         if predictions != None:
             pass
