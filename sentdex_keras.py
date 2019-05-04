@@ -151,7 +151,9 @@ def main():
 
                 pass
 
-        sums_array /= nTotal
+        if flags.predict:
+            sums_array /= nTotal
+            
         if predictions != None:
             pass
 
