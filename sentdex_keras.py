@@ -9,11 +9,11 @@ file_path_carvana_train = '/Users/Eric Fowler/Downloads/carvana/train/'
 file_path_carvana_test = '/Users/Eric Fowler/Downloads/carvana/train/'
 
 def main():
-    start_time = datetime.datetime.now().strftime("%Y%d%H%M%S")
     #print(f'datetime.datetime={str(datetime.datetime)}, datetime.date={str(datetime.date)}, strftime():{datetime.datetime.now().strftime("%Y%d%H%M%S")}')
     thrash = True
     print('tf version:{0}'.format(tf.VERSION))
     print('tf.keras version:{0}'.format(tf.keras.__version__))
+    start_time = datetime.datetime.now().strftime("%Y%d%H%M%S")
     flags, unparsed = ut.parseArgs()
     print(flags)
     SAMPLE_FILE = flags.train_data_path + flags.sample + '.' + flags.img_file_extension

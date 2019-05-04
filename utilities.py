@@ -14,10 +14,10 @@ def parseArgs():
                         default=False,
                         help='Train model?')
     parser.add_argument('--evaluate', type=bool,
-                        default=True,
+                        default=False,
                         help='Evaluate model?')
     parser.add_argument('--predict', type=bool,
-                        default=True,
+                        default=False,
                         help='Predict using model?')
     parser.add_argument('--train_data_path', type=str,
                         default='/Users/Eric Fowler/Downloads/carvana/train/_128x128/',
