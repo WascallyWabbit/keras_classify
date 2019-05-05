@@ -153,12 +153,12 @@ def main():
 
         if flags.predict:
             sums_array /= nTotal
-            
+
         if predictions != None:
             pass
 
 
-        print('Average score:{0},{1}'.format(np.mean(test_scores[0]),np.mean(test_scores[1])))
+        print('Average score:{0},{1}'.format(np.mean([test_scores[i][0] for i in range(len(test_scores))]),np.mean([test_scores[i][1] for i in range(len(test_scores))])))
 
         if flags.show_results:
             y_axis = np.arange(0, 1.0, 1.0/float(len(sums_array)))
